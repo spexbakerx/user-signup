@@ -5,6 +5,11 @@ app = Flask(__name__)
 
 app.config['DEBUG'] = True      # displays runtime errors in the browser, too
 
+@app.route('/signup')
+def display_signup():
+    return render_template('signup.html')
+
+
 def is_blank(text):
     try:
         text = ''
@@ -66,14 +71,14 @@ def signup():
             email = ''
 
     if not password_error and not username_error and not verify_error and not email_error:
-        return redirect('/welcome?name={0}'.format(username))
+        return redirect('/welcome')
     else:
         return render_template('signup.html', username=username, password=password, verify=verify, email=email)
 
-    @app.route('/welcome')
-    def welcome():
-        name = request.form['username']
-        return render_template('welcome.html', name=name)
+@app.route('/welcome', methods=['POST'])
+def welcome():
+    name = request.form['username']
+    return render_template('welcome.html', name=name)
 
 
 app.run()
